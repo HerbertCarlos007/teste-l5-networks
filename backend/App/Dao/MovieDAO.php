@@ -60,6 +60,24 @@ class MovieDAO
         }
     }
 
+    public function getMovieById($id) {
+        $sql = "SELECT * FROM movies WHERE id = :id";
+
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            $movie = $stmt->fetch();
+
+            if ($movie) {
+                return $movie;
+            }else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            die("Erro ao buscar filme pelo ID: " . $e->getMessage());
+        }
+    }
+
     public function getMovieCount() {
         $sql = "SELECT COUNT(*) as count FROM movies";
     

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 require_once("App/Dao/MovieDAO.php");
@@ -9,18 +10,21 @@ use App\Dao\MovieDAO;
 use App\Dao\LogDAO;
 use App\Models\Movie;
 
-class MovieController {
+class MovieController
+{
     private $movieDAO;
     private $logDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->movieDAO = new MovieDAO();
         $this->logDAO = new LogDAO();
         $this->movieDAO->createTableMovie();
         $this->logDAO->createTableLog();
     }
 
-    public function fetchAndSaveMovies() {
+    public function fetchAndSaveMovies()
+    {
         $apiUrl = "https://swapi.py4e.com/api/films";
         $response = file_get_contents($apiUrl);
 
@@ -55,13 +59,6 @@ class MovieController {
                 $character = json_decode($characterResponse, true);
                 $charactersData[] = [
                     'name' => $character['name'],
-                    'height' => $character['height'],
-                    'mass' => $character['mass'],
-                    'hair_color' => $character['hair_color'],
-                    'skin_color' => $character['skin_color'],
-                    'eye_color' => $character['eye_color'],
-                    'birth_year' => $character['birth_year'],
-                    'gender' => $character['gender']
                 ];
             }
 
@@ -90,4 +87,17 @@ class MovieController {
 
         echo "Filmes e personagens salvos com sucesso";
     }
+
+    public function getMovieById($id) {
+        $movie = $this->movieDAO->getMovieById($id);
+    
+        if ($movie) {
+            header('Content-Type: application/json');
+            echo json_encode($movie);
+        } else {
+            http_response_code(404);
+            echo json_encode(['message' => 'Filme não encontrado']);
+        }
+    }
+    
 }

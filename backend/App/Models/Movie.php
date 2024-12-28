@@ -66,6 +66,6 @@ class Movie
         $now = new DateTime();
         $interval = $this->release_date->diff($now);
 
-        return $interval->y . ' years, ' . $interval->m . ' months, ' . $interval->d . ' days';
+        return $interval->y . ' anos, ' . $interval->m . ' meses, ' . $interval->d . ' dias';
     }
 }

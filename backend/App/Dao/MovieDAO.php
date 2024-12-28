@@ -3,6 +3,7 @@
 namespace App\Dao;
 
 use Database;
+use PDO;
 use PDOException;
 
 class MovieDAO
@@ -15,7 +16,8 @@ class MovieDAO
         $this->pdo = $databse->getConection();
     }
 
-    public function createTableMovie() {
+    public function createTableMovie()
+    {
         $sql = "
             CREATE TABLE IF NOT EXISTS movies (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,13 +33,13 @@ class MovieDAO
 
         try {
             $this->pdo->exec($sql);
-            echo "Tabela movies criada com sucesso";
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             die("Erro ao criar tabela movies" . $e->getMessage());
         }
     }
 
-    public function insertMovie($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters) {
+    public function insertMovie($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters)
+    {
         $sql = "
             INSERT INTO movies (title, episode_id, opening_crawl, release_date, director, producer, characters)
             VALUES (:title, :episode_id, :opening_crawl, :release_date, :director, :producer, :characters)
@@ -54,13 +56,23 @@ class MovieDAO
                 ":producer" => $producer,
                 ":characters" => $characters
             ]);
-            echo "Filme inserido com sucesso";
         } catch (PDOException $e) {
             die("Erro ao inserir filme" . $e->getMessage());
         }
     }
 
-    public function getMovieById($id) {
+    public function getAllMovies()
+    {
+        $sql = "SELECT * FROM movies";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getMovieById($id)
+    {
         $sql = "SELECT * FROM movies WHERE id = :id";
 
         try {
@@ -70,7 +82,7 @@ class MovieDAO
 
             if ($movie) {
                 return $movie;
-            }else {
+            } else {
                 return null;
             }
         } catch (PDOException $e) {
@@ -78,9 +90,10 @@ class MovieDAO
         }
     }
 
-    public function getMovieCount() {
+    public function getMovieCount()
+    {
         $sql = "SELECT COUNT(*) as count FROM movies";
-    
+
         try {
             $stmt = $this->pdo->query($sql);
             $result = $stmt->fetch();
@@ -89,5 +102,4 @@ class MovieDAO
             die("Erro ao contar registros na tabela movies: " . $e->getMessage());
         }
     }
-    
 }

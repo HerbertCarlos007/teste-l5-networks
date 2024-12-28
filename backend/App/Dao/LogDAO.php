@@ -27,7 +27,6 @@ class LogDAO
 
         try {
             $this->pdo->exec($sql);
-            echo "Tabela log criada com sucesso";
         } catch (\PDOException $e) {
             die("Erro ao criar tabela log: " . $e->getMessage());
         }
@@ -46,7 +45,6 @@ class LogDAO
                 'timestamp' => $timestamp,
                 'request' => $request
             ]);
-            echo "Log salvo com sucesso";
         } catch (PDOException $e) {
             die("Erro ao inserir log: " . $e->getMessage());
         }

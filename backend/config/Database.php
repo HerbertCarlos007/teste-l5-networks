@@ -17,11 +17,8 @@ class Database
     
            self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
            self::$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-           echo "Conexão com o banco de dados realizada com sucesso!";
         } catch (PDOException $e) {
-        
-            echo "Error: " . $e->getMessage();
+            error_log($e->getMessage());
         }
     }
 

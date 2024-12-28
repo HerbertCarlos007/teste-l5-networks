@@ -91,18 +91,37 @@ class MovieController
     public function getMovieById($id) {
         $timestamp = date("Y-m-d H:i:s");
         $request = "GET /backend/index.php/movies/{$id}";
-
+    
         $this->logDAO->insertLog($timestamp, $request);
         
-        $movie = $this->movieDAO->getMovieById($id);
+        $movieData = $this->movieDAO->getMovieById($id);
+        
+        if ($movieData) {
+            // Criar o objeto Movie
+            $movie = new Movie(
+                $movieData['title'],
+                $movieData['episode_id'],
+                $movieData['opening_crawl'],
+                $movieData['release_date'],
+                $movieData['director'],
+                $movieData['producer'],
+                $movieData['characters']
+            );
     
-        if ($movie) {
+            // Calcular a idade do filme
+            $movieAge = $movie->getMovieAge();
+    
+            // Adicionar a idade ao resultado
+            $movieData['age'] = $movieAge;
+    
+            // Retornar o filme com a idade calculada
             header('Content-Type: application/json');
-            echo json_encode($movie);
+            echo json_encode($movieData);
         } else {
             http_response_code(404);
             echo json_encode(['message' => 'Filme não encontrado']);
         }
     }
+    
     
 }

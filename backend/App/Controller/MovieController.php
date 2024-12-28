@@ -2,26 +2,44 @@
 namespace App\Controller;
 
 require_once("App/Dao/MovieDAO.php");
+require_once("App/Dao/LogDAO.php");
 require_once("App/Models/Movie.php");
 
 use App\Dao\MovieDAO;
+use App\Dao\LogDAO;
 use App\Models\Movie;
 
 class MovieController {
     private $movieDAO;
+    private $logDAO;
 
     public function __construct() {
         $this->movieDAO = new MovieDAO();
+        $this->logDAO = new LogDAO();
         $this->movieDAO->createTableMovie();
+        $this->logDAO->createTableLog();
     }
 
     public function fetchAndSaveMovies() {
         $apiUrl = "https://swapi.py4e.com/api/films";
         $response = file_get_contents($apiUrl);
 
+        $timestamp = date("Y-m-d H:i:s");
+        $request = "GET $apiUrl";
+
+        $movieCount = $this->movieDAO->getMovieCount();
+
+        if ($movieCount > 0) {
+            echo "A tabela já está preenchida. Nenhum dado foi inserido.";
+            return;
+        }
+
+        $this->logDAO->insertLog($timestamp, $request);
+
         if ($response === FALSE) {
             die('Erro ao acessar a API');
         }
+
 
         $data = json_decode($response, true);
 

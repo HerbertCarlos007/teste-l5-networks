@@ -5,7 +5,6 @@ namespace App\Dao;
 use Database;
 use PDOException;
 
-
 class MovieDAO
 {
     private $pdo;
@@ -60,4 +59,17 @@ class MovieDAO
             die("Erro ao inserir filme" . $e->getMessage());
         }
     }
+
+    public function getMovieCount() {
+        $sql = "SELECT COUNT(*) as count FROM movies";
+    
+        try {
+            $stmt = $this->pdo->query($sql);
+            $result = $stmt->fetch();
+            return $result['count'] ?? 0;
+        } catch (PDOException $e) {
+            die("Erro ao contar registros na tabela movies: " . $e->getMessage());
+        }
+    }
+    
 }

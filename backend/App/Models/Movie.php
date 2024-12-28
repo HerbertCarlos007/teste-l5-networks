@@ -19,7 +19,7 @@ class Movie
         $this->title = $title;
         $this->episode_id = $episode_id;
         $this->opening_crawl = $opening_crawl;
-        $this->release_date = new DateTime($release_date);  // Converte a string para objeto DateTime
+        $this->release_date = new DateTime($release_date);
         $this->director = $director;
         $this->producer = $producer;
         $this->characters = $characters;

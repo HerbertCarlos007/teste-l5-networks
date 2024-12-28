@@ -4,7 +4,7 @@ class Database
 {
     protected static $db;
 
-    private function __construct()
+    public function __construct()
     {
         $driver = "mysql";
         $host = "localhost";

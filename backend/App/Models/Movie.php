@@ -6,19 +6,19 @@ use DateTime;
 
 class Movie
 {
-    private $name;
-    private $episode_number;
-    private $synopsis;
+    private $title;
+    private $episode_id;
+    private $opening_crawl;
     private $release_date;
     private $director;
     private $producer;
     private $characters;
     
-    public function __construct($name, $episode_number, $synopsis, $release_date, $director, $producer, $characters)
+    public function __construct($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters)
     {
-        $this->name = $name;
-        $this->episode_number = $episode_number;
-        $this->synopsis = $synopsis;
+        $this->title = $title;
+        $this->episode_id = $episode_id;
+        $this->opening_crawl = $opening_crawl;
         $this->release_date = new DateTime($release_date);  // Converte a string para objeto DateTime
         $this->director = $director;
         $this->producer = $producer;
@@ -26,19 +26,19 @@ class Movie
     }
 
   
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function getEpisodeNumber()
+    public function getEpisodeId()
     {
-        return $this->episode_number;
+        return $this->episode_id;
     }
 
-    public function getSynopsis()
+    public function getOpeningCrawl()
     {
-        return $this->synopsis;
+        return $this->opening_crawl;
     }
 
     public function getReleaseDate()
@@ -46,12 +46,12 @@ class Movie
         return $this->release_date->format('Y-m-d');
     }
 
-    public function getDirectors()
+    public function getDirector()
     {
         return $this->director;
     }
 
-    public function getProducers()
+    public function getProducer()
     {
         return $this->producer;
     }
@@ -61,7 +61,6 @@ class Movie
         return $this->characters;
     }
 
-    // Método para calcular a idade do filme em anos, meses e dias
     public function getMovieAge()
     {
         $now = new DateTime();

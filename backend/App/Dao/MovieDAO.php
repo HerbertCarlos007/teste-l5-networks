@@ -5,7 +5,6 @@ namespace App\Dao;
 use Database;
 use PDOException;
 
-require_once("config/Database.php");
 
 class MovieDAO
 {
@@ -21,9 +20,9 @@ class MovieDAO
         $sql = "
             CREATE TABLE IF NOT EXISTS movies (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                episode_number INT NOT NULL,
-                synopsis TEXT,
+                title VARCHAR(255) NOT NULL,
+                episode_id INT NOT NULL,
+                opening_crawl TEXT,
                 release_date DATE,
                 director VARCHAR(255),
                 producer VARCHAR(255),
@@ -39,18 +38,18 @@ class MovieDAO
         }
     }
 
-    public function insertMovie($name, $episode, $synopsis, $release_date, $director, $producer, $characters) {
+    public function insertMovie($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters) {
         $sql = "
-            INSERT INTO movies (name, episode, synopsis, release_date, director, producer, characters)
-            VALUES (:name, :episode, :synopsis, :release_date, :director, :producer, :characters)
+            INSERT INTO movies (title, episode_id, opening_crawl, release_date, director, producer, characters)
+            VALUES (:title, :episode_id, :opening_crawl, :release_date, :director, :producer, :characters)
         ";
 
         try {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
-                ":name" => $name,
-                ":episode" => $episode,
-                ":synopsis" => $synopsis,
+                ":title" => $title,
+                ":episode_id" => $episode_id,
+                ":opening_crawl" => $opening_crawl,
                 ":release_date" => $release_date,
                 ":director" => $director,
                 ":producer" => $producer,

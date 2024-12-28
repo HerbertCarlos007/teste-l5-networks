@@ -89,6 +89,11 @@ class MovieController
     }
 
     public function getMovieById($id) {
+        $timestamp = date("Y-m-d H:i:s");
+        $request = "GET /backend/index.php/movies/{$id}";
+
+        $this->logDAO->insertLog($timestamp, $request);
+        
         $movie = $this->movieDAO->getMovieById($id);
     
         if ($movie) {

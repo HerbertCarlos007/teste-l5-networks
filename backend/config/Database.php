@@ -6,11 +6,11 @@ class Database
 
     public function __construct()
     {
-        $driver = "mysql";
-        $host = "localhost";
-        $dbname = "starwars";
-        $username = "root";
-        $password = "";
+        $driver = getenv('DB_DRIVER');
+        $host = getenv('DB_HOST');
+        $dbname = getenv('DB_NAME');
+        $username = getenv('DB_USERNAME');
+        $password = getenv('DB_PASSWORD');
 
         try {
            self::$db = new PDO("$driver:host=$host;dbname=$dbname", $username, $password);

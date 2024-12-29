@@ -1,6 +1,9 @@
 <?php
 require_once("config/Database.php");
 require_once("App/Controller/MovieController.php");
+require_once("config/loadEnv.php");
+
+loadEnv('.env');
 
 use App\Controller\MovieController;
 

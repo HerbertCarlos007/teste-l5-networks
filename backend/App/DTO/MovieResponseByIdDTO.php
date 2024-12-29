@@ -2,7 +2,7 @@
 
 namespace App\Dto;
 
-class MovieResponseDTO
+class MovieResponseByIdDTO
 {
     public int $id;
     public string $title;
@@ -12,6 +12,7 @@ class MovieResponseDTO
     public string $director;
     public string $producer;
     public string $characters;
+    public ?string $age; 
 
     public function __construct(array $data)
     {
@@ -23,5 +24,6 @@ class MovieResponseDTO
         $this->director = $data['director'];
         $this->producer = $data['producer'];
         $this->characters = $data['characters'];
+        $this->age = $data['age'];  
     }
 }

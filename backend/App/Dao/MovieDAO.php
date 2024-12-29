@@ -56,6 +56,7 @@ class MovieDAO
                 ":producer" => $producer,
                 ":characters" => $characters
             ]);
+            return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             die("Erro ao inserir filme" . $e->getMessage());
         }

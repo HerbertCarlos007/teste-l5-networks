@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id'); // Pega o parâmetro 'id' da URL
+    const movieId = urlParams.get('id');
 
     if (movieId) {
         fetchMovieDetails(movieId);

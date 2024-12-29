@@ -5,12 +5,14 @@ namespace App\Service;
 require_once("App/Dao/MovieDAO.php");
 require_once("App/Dao/LogDAO.php");
 require_once("App/Models/Movie.php");
-require_once("App/Dto/MovieResponseDto.php");
+require_once("App/DTO/MovieResponseDTO.php");
+require_once("App/DTO/MovieResponseByIdDTO.php");
 
 use App\Dao\MovieDAO;
 use App\Dao\LogDAO;
 use App\Models\Movie;
-use App\Dto\MovieResponseDto;
+use App\Dto\MovieResponseDTO;
+use App\Dto\MovieResponseByIdDTO;
 
 class MovieService
 {
@@ -28,9 +30,8 @@ class MovieService
     public function fetchAndSaveMovies(): array
     {
         $moviesData = $this->movieDAO->getAllMovies();
-
         if (count($moviesData) > 0) {
-            return array_map(fn($movieData) => new MovieResponseDto($movieData), $moviesData);
+            return array_map(fn($movieData) => new MovieResponseDTO($movieData), $moviesData);
         }
 
         $apiUrl = getenv('API_URL');
@@ -52,7 +53,6 @@ class MovieService
                 if ($characterResponse === FALSE) {
                     throw new \Exception('Erro ao acessar a URL de personagem');
                 }
-
                 $character = json_decode($characterResponse, true);
                 $charactersData[] = $character['name'];
             }
@@ -85,22 +85,37 @@ class MovieService
                 'release_date' => $movie->getReleaseDate(),
                 'director' => $movie->getDirector(),
                 'producer' => $movie->getProducer(),
-                'characters' => explode(', ', $movie->getCharacters())
+                'characters' => $movie->getCharacters(),
             ]);
         }
-
         return $movies;
     }
 
-    public function getMovieById($id): ?MovieResponseDto
+    public function getMovieById($id): ?MovieResponseByIdDTO
     {
         $movieData = $this->movieDAO->getMovieById($id);
-        $this->logDAO->insertLog(date("Y-m-d H:i:s"), "GET /movies/{$id}");
+
+        $timestamp = date("Y-m-d H:i:s");
+        $request = "GET /backend/index.php/movies/{$id}";
+        $this->logDAO->insertLog($timestamp, $request);
 
         if (!$movieData) {
-            return null;
+            return null; 
         }
 
-        return new MovieResponseDto($movieData);
+        $movie = new Movie(
+            $movieData['title'],
+            $movieData['episode_id'],
+            $movieData['opening_crawl'],
+            $movieData['release_date'],
+            $movieData['director'],
+            $movieData['producer'],
+            $movieData['characters']
+        );
+
+        $movieAge = $movie->getMovieAge();
+        $movieData['age'] = $movieAge;
+        
+        return new MovieResponseByIdDTO($movieData);
     }
 }

@@ -14,19 +14,22 @@ use App\Models\Movie;
 use App\Dto\MovieResponseDTO;
 use App\Dto\MovieResponseByIdDTO;
 use Exception;
-use PDOException;
 
 class MovieService
 {
     private $movieDAO;
     private $logDAO;
+    private $timestamp; 
 
     public function __construct()
     {
+        date_default_timezone_set('America/Sao_Paulo');
+
         $this->movieDAO = new MovieDAO();
         $this->logDAO = new LogDAO();
         $this->movieDAO->createTableMovie();
         $this->logDAO->createTableLog();
+        $this->timestamp = date("Y-m-d H:i:s");
     }
 
     public function fetchAndSaveMovies(): array
@@ -39,7 +42,7 @@ class MovieService
         $apiUrl = getenv('API_URL');
         $response = file_get_contents($apiUrl);
 
-        $this->logDAO->insertLog(date("Y-m-d H:i:s"), "GET $apiUrl");
+        $this->logDAO->insertLog($this->timestamp, "GET $apiUrl");
 
         if ($response === FALSE) {
             throw new \Exception('Erro ao acessar a API');
@@ -99,9 +102,8 @@ class MovieService
     {
         $movieData = $this->movieDAO->getMovieById($id);
 
-        $timestamp = date("Y-m-d H:i:s");
         $request = "GET /backend/index.php/movies/{$id}";
-        $this->logDAO->insertLog($timestamp, $request);
+        $this->logDAO->insertLog($this->timestamp, $request);
 
         if (!$movieData) {
             return null;
@@ -126,16 +128,20 @@ class MovieService
 
     public function updateIsFavorite(int $id, bool $isFavorite)
     {
+        $request = "GET /backend/index.php/movies/{$id}/favorite";
         try {
-            return $this->movieDAO->updateIsFavorite($id, $isFavorite);
+            $this->logDAO->insertLog($this->timestamp, $request);
+            return $this->movieDAO->updateIsFavorite($id, $isFavorite);    
         } catch (Exception $e) {
             die("Erro ao atualizar status de favorito: " . $e->getMessage());
         }
     }
 
     public function getMoviesByName($title)
-    {
+    {   
+        $request = "GET /backend/index.php/movies?={$title}";
         try {
+            $this->logDAO->insertLog($this->timestamp, $request);
             return $this->movieDAO->filterByName($title);
         } catch (Exception $e) {
             die("Erro ao buscar filmes: " . $e->getMessage());

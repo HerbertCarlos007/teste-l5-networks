@@ -34,15 +34,12 @@ class MovieController
     public function updateFavoriteStatus($id, $isFavorite)
     {
         try {
-            $success = $this->movieService->updateIsFavorite($id, $isFavorite);
-
-            if ($success) {
-                return 'Status de favorito atualizado com sucesso!';
-            } else {
-                return 'Não foi possível atualizar o status de favorito.';
-            }
+            // Chama a função de atualização diretamente sem verificar o sucesso
+            return $this->movieService->updateIsFavorite($id, $isFavorite);
         } catch (Exception $e) {
+            // Retorna o erro real sem esconder
             return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
         }
     }
+    
 }

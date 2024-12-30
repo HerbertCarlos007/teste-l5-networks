@@ -28,7 +28,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT' && preg_match('#^/backend/index.php
     $id = intval($matches[1]);
 
     $data = json_decode(file_get_contents('php://input'), true);
-    $isFavorite = isset($data['is_favorite']) ? (bool) $data['is_favorite'] : false;
+    $isFavorite = isset($data['is_favorite']) ? (bool) $data['is_favorite'] : 'false';
     
     $response = $movieController->updateFavoriteStatus($id, $isFavorite);
     

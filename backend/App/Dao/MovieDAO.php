@@ -113,7 +113,7 @@ class MovieDAO
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
                 ':id' => $id,
-                ':is_favorite' => $isFavorite ? 1 : 0,
+                ':is_favorite' => $isFavorite,
             ]);
                 return $stmt->rowCount() > 0;
 

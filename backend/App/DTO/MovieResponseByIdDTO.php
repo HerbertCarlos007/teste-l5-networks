@@ -12,7 +12,8 @@ class MovieResponseByIdDTO
     public string $director;
     public string $producer;
     public string $characters;
-    public ?string $age; 
+    public ?string $age;
+    public bool $is_favorite;
 
     public function __construct(array $data)
     {
@@ -24,6 +25,7 @@ class MovieResponseByIdDTO
         $this->director = $data['director'];
         $this->producer = $data['producer'];
         $this->characters = $data['characters'];
-        $this->age = $data['age'];  
+        $this->age = $data['age'];
+        $this->is_favorite = $data['is_favorite'] ?? false;
     }
 }

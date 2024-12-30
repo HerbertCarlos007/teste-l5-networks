@@ -27,7 +27,8 @@ class MovieDAO
                 release_date DATE,
                 director VARCHAR(255),
                 producer VARCHAR(255),
-                characters TEXT
+                characters TEXT,
+                is_favorite TINYINT(1) DEFAULT 0
             )
         ";
 
@@ -38,11 +39,11 @@ class MovieDAO
         }
     }
 
-    public function insertMovie($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters)
+    public function insertMovie($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters, $is_favorite)
     {
         $sql = "
-            INSERT INTO movies (title, episode_id, opening_crawl, release_date, director, producer, characters)
-            VALUES (:title, :episode_id, :opening_crawl, :release_date, :director, :producer, :characters)
+            INSERT INTO movies (title, episode_id, opening_crawl, release_date, director, producer, characters, is_favorite)
+            VALUES (:title, :episode_id, :opening_crawl, :release_date, :director, :producer, :characters, :is_favorite)
         ";
 
         try {
@@ -54,7 +55,8 @@ class MovieDAO
                 ":release_date" => $release_date,
                 ":director" => $director,
                 ":producer" => $producer,
-                ":characters" => $characters
+                ":characters" => $characters,
+                ":is_favorite" => $is_favorite
             ]);
             return $this->pdo->lastInsertId();
         } catch (PDOException $e) {

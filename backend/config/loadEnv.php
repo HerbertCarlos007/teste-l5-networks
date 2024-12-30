@@ -1,5 +1,4 @@
 <?php
-// config/env.php
 
 function loadEnv($file)
 {

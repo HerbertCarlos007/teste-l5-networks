@@ -12,6 +12,7 @@ class MovieResponseDTO
     public string $director;
     public string $producer;
     public string $characters;
+    public bool $is_favorite;
 
     public function __construct(array $data)
     {
@@ -23,5 +24,6 @@ class MovieResponseDTO
         $this->director = $data['director'];
         $this->producer = $data['producer'];
         $this->characters = $data['characters'];
+        $this->is_favorite = $data['is_favorite'] ?? false;
     }
 }

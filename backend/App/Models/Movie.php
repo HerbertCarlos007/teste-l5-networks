@@ -13,8 +13,9 @@ class Movie
     private $director;
     private $producer;
     private $characters;
+    private $isFavorite;
     
-    public function __construct($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters)
+    public function __construct($title, $episode_id, $opening_crawl, $release_date, $director, $producer, $characters, $isFavorite)
     {
         $this->title = $title;
         $this->episode_id = $episode_id;
@@ -23,6 +24,7 @@ class Movie
         $this->director = $director;
         $this->producer = $producer;
         $this->characters = $characters;
+        $this->isFavorite = $isFavorite;
     }
 
   
@@ -61,6 +63,11 @@ class Movie
         return $this->characters;
     }
 
+    public function getIsFavorite()
+    {
+        return $this->isFavorite;
+    }
+
     public function getMovieAge()
     {
         $now = new DateTime();
@@ -68,4 +75,6 @@ class Movie
 
         return $interval->y . ' anos, ' . $interval->m . ' meses, ' . $interval->d . ' dias';
     }
+
+    
 }

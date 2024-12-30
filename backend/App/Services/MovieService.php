@@ -64,7 +64,8 @@ class MovieService
                 $movieData['release_date'],
                 $movieData['director'],
                 $movieData['producer'],
-                implode(', ', $charactersData)
+                implode(', ', $charactersData),
+                $movieData['is_favorite'] ?? false 
             );
 
             $movieId = $this->movieDAO->insertMovie(
@@ -74,7 +75,8 @@ class MovieService
                 $movie->getReleaseDate(),
                 $movie->getDirector(),
                 $movie->getProducer(),
-                $movie->getCharacters()
+                $movie->getCharacters(),
+                $movie->getIsFavorite()
             );
 
             $movies[] = new MovieResponseDto([
@@ -85,7 +87,7 @@ class MovieService
                 'release_date' => $movie->getReleaseDate(),
                 'director' => $movie->getDirector(),
                 'producer' => $movie->getProducer(),
-                'characters' => $movie->getCharacters(),
+                'characters' => $movie->getCharacters()
             ]);
         }
         return $movies;
@@ -110,7 +112,8 @@ class MovieService
             $movieData['release_date'],
             $movieData['director'],
             $movieData['producer'],
-            $movieData['characters']
+            $movieData['characters'],
+            $movieData['is_favorite']
         );
 
         $movieAge = $movie->getMovieAge();

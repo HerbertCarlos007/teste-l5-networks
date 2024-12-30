@@ -132,4 +132,13 @@ class MovieService
             die("Erro ao atualizar status de favorito: " . $e->getMessage());
         }
     }
+
+    public function getMoviesByName($title)
+    {
+        try {
+            return $this->movieDAO->filterByName($title);
+        } catch (Exception $e) {
+            die("Erro ao buscar filmes: " . $e->getMessage());
+        }
+    }
 }

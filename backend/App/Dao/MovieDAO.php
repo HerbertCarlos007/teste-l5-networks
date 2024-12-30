@@ -121,4 +121,18 @@ class MovieDAO
             die("Erro ao atualizar filme como favorito: " . $e->getMessage());
         }
     }
+    
+    public function filterByName($title) {
+        $sql = "SELECT * FROM movies WHERE title LIKE :title";
+
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':title' => '%' . $title . '%',
+            ]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch (PDOException $e) {
+            die("Erro ao filtrar filme " . $e->getMessage());
+        }
+    }
 }

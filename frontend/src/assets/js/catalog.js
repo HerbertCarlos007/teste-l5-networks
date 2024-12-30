@@ -1,13 +1,22 @@
 $(document).ready(function () {
-  function fetchMovies() {
+  function fetchMovies(title = '') {
     $('#loading-spinner').show();
+    let url = 'http://localhost/backend/index.php/movies';
+    if (title) {
+      url += `?title=${encodeURIComponent(title)}`;
+    }
 
     $.ajax({
-      url: 'http://localhost/backend/index.php/movies',
+      url: url,
       method: 'GET',
       success: function (response) {
         try {
-          renderMovies(response);
+          let movies = response;
+          if (typeof response === 'string') {
+            movies = JSON.parse(response);
+          }
+          renderMovies(movies);
+
         } catch (error) {
           console.error('Erro ao processar os dados:', error);
         }
@@ -97,4 +106,14 @@ $(document).ready(function () {
   }
 
   fetchMovies();
+
+  $('#searchButton').on('click', function () {
+    const title = $('#searchInput').val();
+    fetchMovies(title);
+  });
+
+  $('#clearButton').on('click', function () {
+    $('#searchInput').val('');
+    fetchMovies();
+  });
 });

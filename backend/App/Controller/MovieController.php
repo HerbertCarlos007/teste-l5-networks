@@ -34,12 +34,19 @@ class MovieController
     public function updateFavoriteStatus($id, $isFavorite)
     {
         try {
-            // Chama a função de atualização diretamente sem verificar o sucesso
             return $this->movieService->updateIsFavorite($id, $isFavorite);
         } catch (Exception $e) {
-            // Retorna o erro real sem esconder
             return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
         }
     }
-    
+
+    public function getMoviesByName($title)
+    {
+        try {
+            $movie = $this->movieService->getMoviesByName($title);
+            echo json_encode($movie);
+        } catch (Exception $e) {
+            return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
+        }
+    }
 }

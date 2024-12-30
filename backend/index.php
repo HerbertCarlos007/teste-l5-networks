@@ -16,8 +16,13 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true"); 
 
 if (strpos($_SERVER['REQUEST_URI'], '/backend/index.php/movies') !== false && $_SERVER['REQUEST_METHOD'] === 'GET' && !preg_match('#^/backend/index.php/movies/(\d+)$#', $_SERVER['REQUEST_URI'])) {
-    $movies = $movieController->fetchAndSaveMovies();
-} 
+    if (isset($_GET['title']) && !empty($_GET['title'])) {
+        $title = $_GET['title'];
+        $movies = $movieController->getMoviesByName($title);
+    } else {
+        $movies = $movieController->fetchAndSaveMovies();
+    }
+}
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('#^/backend/index.php/movies/(\d+)$#', $_SERVER['REQUEST_URI'], $matches)) {
     $id = intval($matches[1]);

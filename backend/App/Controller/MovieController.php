@@ -5,6 +5,7 @@ namespace App\Controller;
 require_once("App/Services/MovieService.php");
 
 use App\Service\MovieService;
+use Exception;
 
 class MovieController
 {
@@ -28,5 +29,20 @@ class MovieController
         $movie = $this->movieService->getMovieById($id);
         header('Content-Type: application/json');
         echo json_encode($movie);
+    }
+
+    public function updateFavoriteStatus($id, $isFavorite)
+    {
+        try {
+            $success = $this->movieService->updateIsFavorite($id, $isFavorite);
+
+            if ($success) {
+                return 'Status de favorito atualizado com sucesso!';
+            } else {
+                return 'Não foi possível atualizar o status de favorito.';
+            }
+        } catch (Exception $e) {
+            return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
+        }
     }
 }

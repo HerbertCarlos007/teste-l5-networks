@@ -105,4 +105,20 @@ class MovieDAO
             die("Erro ao contar registros na tabela movies: " . $e->getMessage());
         }
     }
+
+    public function updateIsFavorite(int $id , bool $isFavorite) {
+        $sql = "UPDATE movies SET is_favorite = :is_favorite WHERE id = :id";
+
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':id' => $id,
+                ':is_favorite' => $isFavorite ? 1 : 0,
+            ]);
+                return $stmt->rowCount() > 0;
+
+        }catch (PDOException $e) {
+            die("Erro ao atualizar filme como favorito: " . $e->getMessage());
+        }
+    }
 }

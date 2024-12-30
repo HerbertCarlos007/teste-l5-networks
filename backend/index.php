@@ -15,7 +15,6 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); 
 header("Access-Control-Allow-Credentials: true"); 
 
-
 if (strpos($_SERVER['REQUEST_URI'], '/backend/index.php/movies') !== false && $_SERVER['REQUEST_METHOD'] === 'GET' && !preg_match('#^/backend/index.php/movies/(\d+)$#', $_SERVER['REQUEST_URI'])) {
     $movies = $movieController->fetchAndSaveMovies();
 } 
@@ -23,6 +22,17 @@ if (strpos($_SERVER['REQUEST_URI'], '/backend/index.php/movies') !== false && $_
 elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('#^/backend/index.php/movies/(\d+)$#', $_SERVER['REQUEST_URI'], $matches)) {
     $id = intval($matches[1]);
     $movieController->getMovieById($id);
+} 
+
+elseif ($_SERVER['REQUEST_METHOD'] === 'PUT' && preg_match('#^/backend/index.php/movies/(\d+)/favorite$#', $_SERVER['REQUEST_URI'], $matches)) {
+    $id = intval($matches[1]);
+
+    $data = json_decode(file_get_contents('php://input'), true);
+    $isFavorite = isset($data['is_favorite']) ? (bool) $data['is_favorite'] : false;
+    
+    $response = $movieController->updateFavoriteStatus($id, $isFavorite);
+    
+    echo json_encode(['message' => $response]);
 } else {
     error_log("URL ou método da requisição incorretos.");
 }

@@ -41,6 +41,7 @@ $(document).ready(function () {
               </p>
             </div>
           </div>
+           <button>Adicionar a os favoritos</button>
         </div>
       `;
       catalog.append(cardHtml);

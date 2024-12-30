@@ -13,6 +13,8 @@ use App\Dao\LogDAO;
 use App\Models\Movie;
 use App\Dto\MovieResponseDTO;
 use App\Dto\MovieResponseByIdDTO;
+use Exception;
+use PDOException;
 
 class MovieService
 {
@@ -65,7 +67,7 @@ class MovieService
                 $movieData['director'],
                 $movieData['producer'],
                 implode(', ', $charactersData),
-                $movieData['is_favorite'] ?? false 
+                $movieData['is_favorite'] ?? false
             );
 
             $movieId = $this->movieDAO->insertMovie(
@@ -102,7 +104,7 @@ class MovieService
         $this->logDAO->insertLog($timestamp, $request);
 
         if (!$movieData) {
-            return null; 
+            return null;
         }
 
         $movie = new Movie(
@@ -118,7 +120,16 @@ class MovieService
 
         $movieAge = $movie->getMovieAge();
         $movieData['age'] = $movieAge;
-        
+
         return new MovieResponseByIdDTO($movieData);
+    }
+
+    public function updateIsFavorite(int $id, bool $isFavorite)
+    {
+        try {
+            return $this->movieDAO->updateIsFavorite($id, $isFavorite);
+        } catch (Exception $e) {
+            die("Erro ao atualizar status de favorito: " . $e->getMessage());
+        }
     }
 }

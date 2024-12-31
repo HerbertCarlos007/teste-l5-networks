@@ -1,6 +1,6 @@
 ## Configuração do Ambiente
 
-1. Crie um arquivo `.env` na raiz do projeto nas pasta backend e adicione os seguintes campos com as configurações adequadas:
+## 1. Crie um arquivo `.env` na raiz do projeto nas pasta backend e adicione os seguintes campos com as configurações adequadas:
 
    ```
    API_URL= <URL da sua API, use esse valor: https://swapi.py4e.com/api/films>
@@ -33,7 +33,7 @@
     - Clique em **Instalar** na extensão chamada **Live Server** (desenvolvida por Ritwick Dey).
 
 
-## 4. Abrindo o Frontend com o Live Server
+## 2. Abrindo o Frontend com o Live Server
 
 Após configurar o que foi dito anteriormente, siga esses passos:
 

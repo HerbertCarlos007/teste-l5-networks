@@ -30,6 +30,33 @@ $(document).ready(function () {
     });
   }
 
+  function fetchFavoriteMovies() {
+    $('#loading-spinner').show();
+
+    $.ajax({
+      url: 'http://localhost/backend/index.php/movies/favorites',
+      method: 'GET',
+      success: function (response) {
+        try {
+          let movies = response;
+          if (typeof response === 'string') {
+            movies = JSON.parse(response);
+          }
+          renderMovies(movies);
+
+        } catch (error) {
+          console.error('Erro ao processar os dados:', error);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro na requisição:', error);
+      },
+      complete: function () {
+        $('#loading-spinner').hide();
+      },
+    });
+  }
+
   function renderMovies(movies) {
     const catalog = $('#catalog');
     catalog.empty();
@@ -115,5 +142,9 @@ $(document).ready(function () {
   $('#clearButton').on('click', function () {
     $('#searchInput').val('');
     fetchMovies();
+  });
+
+  $('#favoritesButton').on('click', function () {
+    fetchFavoriteMovies();
   });
 });

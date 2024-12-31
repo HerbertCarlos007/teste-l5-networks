@@ -135,4 +135,24 @@ class MovieDAO
             die("Erro ao filtrar filme " . $e->getMessage());
         }
     }
+
+    public function getAllFavoriteMovies()
+    {
+        $sql = "SELECT * FROM movies WHERE is_favorite = 1";
+
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $movie = $stmt->fetchAll();
+
+            if ($movie) {
+                return $movie;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            die("Erro ao buscar filmes favoritos " . $e->getMessage());
+        }
+    }
+
 }

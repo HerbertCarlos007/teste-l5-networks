@@ -19,7 +19,7 @@ class MovieService
 {
     private $movieDAO;
     private $logDAO;
-    private $timestamp; 
+    private $timestamp;
 
     public function __construct()
     {
@@ -131,18 +131,29 @@ class MovieService
         $request = "GET /backend/index.php/movies/{$id}/favorite";
         try {
             $this->logDAO->insertLog($this->timestamp, $request);
-            return $this->movieDAO->updateIsFavorite($id, $isFavorite);    
+            return $this->movieDAO->updateIsFavorite($id, $isFavorite);
         } catch (Exception $e) {
             die("Erro ao atualizar status de favorito: " . $e->getMessage());
         }
     }
 
     public function getMoviesByName($title)
-    {   
+    {
         $request = "GET /backend/index.php/movies?={$title}";
         try {
             $this->logDAO->insertLog($this->timestamp, $request);
             return $this->movieDAO->filterByName($title);
+        } catch (Exception $e) {
+            die("Erro ao buscar filmes: " . $e->getMessage());
+        }
+    }
+
+    public function getAllFavoriteMovies() {
+
+        $request = "GET /backend/index.php/movies/favorites";
+        try{
+            $this->logDAO->insertLog($this->timestamp, $request);
+            return $this->movieDAO->getAllFavoriteMovies();
         } catch (Exception $e) {
             die("Erro ao buscar filmes: " . $e->getMessage());
         }

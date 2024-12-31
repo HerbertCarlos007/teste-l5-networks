@@ -49,4 +49,13 @@ class MovieController
             return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
         }
     }
+
+    public function getAllFavoriteMovies()
+    {
+        try {
+            return $this->movieService->getAllFavoriteMovies();
+        } catch (Exception $e) {
+            return 'Erro ao atualizar status de favorito: ' . $e->getMessage();
+        }
+    }
 }

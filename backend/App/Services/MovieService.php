@@ -136,7 +136,7 @@ class MovieService
         return new MovieResponseByIdDTO($movieData);
     }
 
-    public function updateIsFavorite(int $id, bool $isFavorite)
+    public function updateIsFavorite(int $id, bool $isFavorite): bool
     {
         $request = "GET /backend/index.php/movies/{$id}/favorite";
         try {
@@ -147,7 +147,7 @@ class MovieService
         }
     }
 
-    public function getMoviesByName($title)
+    public function getMoviesByName($title): array
     {
         $request = "GET /backend/index.php/movies?={$title}";
         try {
@@ -158,7 +158,7 @@ class MovieService
         }
     }
 
-    public function getAllFavoriteMovies() {
+    public function getAllFavoriteMovies(): array {
 
         $request = "GET /backend/index.php/movies/favorites";
         try{

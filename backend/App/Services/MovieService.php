@@ -38,30 +38,39 @@ class MovieService
         if (count($moviesData) > 0) {
             return array_map(fn($movieData) => new MovieResponseDTO($movieData), $moviesData);
         }
-
+    
         $apiUrl = getenv('API_URL');
         $response = file_get_contents($apiUrl);
-
+    
         $this->logDAO->insertLog($this->timestamp, "GET $apiUrl");
-
+    
         if ($response === FALSE) {
             throw new \Exception('Erro ao acessar a API');
         }
-
+    
         $data = json_decode($response, true);
         $movies = [];
-
+    
+        $allCharacterUrls = [];
         foreach ($data['results'] as $movieData) {
-            $charactersData = [];
-            foreach ($movieData['characters'] as $characterUrl) {
-                $characterResponse = file_get_contents($characterUrl);
-                if ($characterResponse === FALSE) {
-                    throw new \Exception('Erro ao acessar a URL de personagem');
-                }
-                $character = json_decode($characterResponse, true);
-                $charactersData[] = $character['name'];
-            }
+            $allCharacterUrls = array_merge($allCharacterUrls, $movieData['characters']);
+        }
 
+        $allCharacterUrls = array_unique($allCharacterUrls);
+    
+        $charactersData = [];
+        foreach ($allCharacterUrls as $characterUrl) {
+            $characterResponse = file_get_contents($characterUrl);
+            if ($characterResponse === FALSE) {
+                throw new \Exception("Erro ao acessar a URL do personagem: $characterUrl");
+            }
+            $character = json_decode($characterResponse, true);
+            $charactersData[$characterUrl] = $character['name'];
+        }
+    
+        foreach ($data['results'] as $movieData) {
+            $charactersNames = array_map(fn($url) => $charactersData[$url] ?? 'Desconhecido', $movieData['characters']);
+    
             $movie = new Movie(
                 $movieData['title'],
                 $movieData['episode_id'],
@@ -69,10 +78,10 @@ class MovieService
                 $movieData['release_date'],
                 $movieData['director'],
                 $movieData['producer'],
-                implode(', ', $charactersData),
+                implode(', ', $charactersNames),
                 $movieData['is_favorite'] ?? false
             );
-
+    
             $movieId = $this->movieDAO->insertMovie(
                 $movie->getTitle(),
                 $movie->getEpisodeId(),
@@ -83,7 +92,7 @@ class MovieService
                 $movie->getCharacters(),
                 $movie->getIsFavorite()
             );
-
+    
             $movies[] = new MovieResponseDto([
                 'id' => $movieId,
                 'title' => $movie->getTitle(),
@@ -97,6 +106,7 @@ class MovieService
         }
         return $movies;
     }
+    
 
     public function getMovieById($id): ?MovieResponseByIdDTO
     {
